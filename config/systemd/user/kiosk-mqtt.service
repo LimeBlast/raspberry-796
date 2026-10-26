@@ -1,0 +1,11 @@
+[Unit]
+Description=Floor796 kiosk screen and Chromium for Home Assistant (MQTT)
+
+[Service]
+ExecStart=%h/kiosk-mqtt.sh
+ExecStopPost=/usr/bin/mosquitto_pub -r -t %H/status -m offline
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target

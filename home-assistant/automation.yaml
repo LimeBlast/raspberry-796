@@ -1,0 +1,48 @@
+# Add to automations.yaml. Replace person.you with your person entity, and oni in light.oni_screen
+# and switch.oni_kiosk with your Pi's hostname.
+- id: floor796_kiosk_schedule
+  alias: Floor796 kiosk schedule
+  description: Runs the Floor796 kiosk only while you are home, 06:00 to 22:00,
+    dimmed outside sunrise to sunset. Otherwise it stops Chromium and turns the screen off, to save
+    power. Chromium starts before the screen comes on, so the page has loaded by then.
+  triggers:
+  - trigger: time
+    at: '06:00:00'
+  - trigger: time
+    at: '22:00:00'
+  - trigger: sun
+    event: sunrise
+  - trigger: sun
+    event: sunset
+  - trigger: state
+    entity_id: person.you
+    to: null
+  - trigger: state
+    entity_id: switch.oni_kiosk
+    from: unavailable
+  - trigger: homeassistant
+    event: start
+  variables:
+    brightness: "{{ 0 if states('person.you') not in ['home', 'unknown', 'unavailable'] or not today_at('06:00') <= now() < today_at('22:00') else 255 if is_state('sun.sun', 'above_horizon') else 40 }}"
+  actions:
+  - if: '{{ brightness == 0 }}'
+    then:
+    - action: light.turn_off
+      target:
+        entity_id: light.oni_screen
+    - action: switch.turn_off
+      target:
+        entity_id: switch.oni_kiosk
+    else:
+    - if: "{{ is_state('switch.oni_kiosk', 'off') }}"
+      then:
+      - action: switch.turn_on
+        target:
+          entity_id: switch.oni_kiosk
+      - delay: 15
+    - action: light.turn_on
+      target:
+        entity_id: light.oni_screen
+      data:
+        brightness: '{{ brightness }}'
+  mode: restart

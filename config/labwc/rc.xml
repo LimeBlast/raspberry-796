@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<labwc_config>
+  <!-- Optional touch: get the device name from `libinput list-devices` -->
+  <touch deviceName="10-0038 generic ft5x06 (79)" mapToOutput="DSI-1"/>
+</labwc_config>

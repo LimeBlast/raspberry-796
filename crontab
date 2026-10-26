@@ -1,0 +1,2 @@
+# Restart the browser every 6 hours, clearing any slow memory build-up
+0 */6 * * * $HOME/kiosk.sh >/dev/null 2>&1
