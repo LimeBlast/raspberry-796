@@ -20,7 +20,8 @@ screen() {  # $1 = brightness 1-255, or 0 for off (backlight and display output)
 kiosk() {  # $1 = ON or OFF
   if [ "$1" = ON ]; then
     rm -f $OFF
-    pgrep -f /usr/lib/chromium/chromium >/dev/null || setsid $HOME/kiosk.sh >/dev/null 2>&1 </dev/null &
+    # its own unit, or systemd stops Chromium whenever this service restarts
+    pgrep -f /usr/lib/chromium/chromium >/dev/null || systemd-run --user --collect --quiet $HOME/kiosk.sh
   else
     touch $OFF; pkill -f /usr/lib/chromium/chromium
   fi
