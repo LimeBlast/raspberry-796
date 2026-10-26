@@ -35,7 +35,7 @@ last=$(cat $BL); [ "$last" -gt 0 ] || last=255  # brightness to use for a plain 
 if [ "$(cat $BL)" -gt 0 ]; then pub $N/screen/brightness "$last"; pub $N/screen/state ON; else pub $N/screen/state OFF; fi
 if [ -e $OFF ]; then pub $N/kiosk/state OFF; else pub $N/kiosk/state ON; fi
 # online once mosquitto_sub below has subscribed, or HA's first commands are lost
-# ponytail: fixed 2 s wait, fine on a LAN. The service's ExecStopPost and the will publish offline.
+# A fixed 2 s wait is enough on a LAN. The service's ExecStopPost and the will publish offline.
 (sleep 2; pub $N/status online) &
 
 mosquitto_sub -v -t $N/screen/set -t $N/screen/brightness/set -t $N/kiosk/set \
