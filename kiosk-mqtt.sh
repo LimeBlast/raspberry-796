@@ -37,7 +37,10 @@ if [ "$(cat $BL)" -gt 0 ]; then pub $N/screen/brightness "$last"; pub $N/screen/
 if [ -e $OFF ]; then pub $N/kiosk/state OFF; else pub $N/kiosk/state ON; fi
 # online once mosquitto_sub below has subscribed, or HA's first commands are lost
 # A fixed 2 s wait is enough on a LAN. The service's ExecStopPost and the will publish offline.
-(sleep 2; pub $N/status online) &
+# Then again every minute: if the connection drops (an HA restart, a Wi-Fi blip), the broker
+# publishes the will (offline) and mosquitto_sub reconnects without telling anyone, so without
+# this HA shows Oni unavailable until the service restarts.
+(sleep 2; while :; do pub $N/status online; sleep 60; done) &
 
 mosquitto_sub -v -t $N/screen/set -t $N/screen/brightness/set -t $N/kiosk/set \
   --will-topic $N/status --will-payload offline --will-retain |
