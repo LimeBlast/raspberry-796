@@ -39,7 +39,7 @@ if [ -e $OFF ]; then pub $N/kiosk/state OFF; else pub $N/kiosk/state ON; fi
 # A fixed 2 s wait is enough on a LAN. The service's ExecStopPost and the will publish offline.
 # Then again every minute: if the connection drops (an HA restart, a Wi-Fi blip), the broker
 # publishes the will (offline) and mosquitto_sub reconnects without telling anyone, so without
-# this HA shows Oni unavailable until the service restarts.
+# this HA shows the Pi unavailable until the service restarts.
 (sleep 2; while :; do pub $N/status online; sleep 60; done) &
 
 mosquitto_sub -v -t $N/screen/set -t $N/screen/brightness/set -t $N/kiosk/set \
