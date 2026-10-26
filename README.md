@@ -2,7 +2,12 @@
 
 [Floor796](https://floor796.com) wandering by itself, full screen, on a Raspberry Pi 4 and the official 7" touchscreen. Home Assistant can optionally dim it, turn it off, and stop the browser when no one's around.
 
-The background, and why each piece is there, is in the blog post: [Running Floor796 in kiosk mode on a Raspberry Pi](https://maker.rip/2026/10/21/running-floor796-in-kiosk-mode-on-a-raspberry-pi/). This repo holds the files and the steps.
+The background, and why each piece is there, is in two blog posts:
+
+- [Running Floor796 in kiosk mode on a Raspberry Pi](https://maker.rip/2026/10/21/running-floor796-in-kiosk-mode-on-a-raspberry-pi/): the kiosk itself.
+- [Floor796 kiosk: the bug's fixed, and Home Assistant runs the screen](https://maker.rip/2026/10/26/floor796-kiosk-the-bug-s-fixed-and-home-assistant-runs-the-screen/): the Wandering bug fix, and the Home Assistant part.
+
+This repo holds the files and the steps.
 
 Not affiliated with Floor796. The artwork on the screen is theirs.
 
@@ -55,7 +60,7 @@ Everything runs as your normal desktop user, not root.
 
 4. Reboot. Floor796 appears and starts wandering within about 20 seconds.
 
-The blog post's watchdog isn't needed any more. Wandering used to blank the screen every 30 to 90 minutes, and Floor796 fixed that on 25 October 2026.
+The [first post](https://maker.rip/2026/10/21/running-floor796-in-kiosk-mode-on-a-raspberry-pi/)'s watchdog isn't needed any more. Wandering used to blank the screen every 30 to 90 minutes, and Floor796 fixed that on 25 October 2026 ([details](https://maker.rip/2026/10/26/floor796-kiosk-the-bug-s-fixed-and-home-assistant-runs-the-screen/#the-bugs-fixed)).
 
 ## Home Assistant (optional)
 
@@ -87,8 +92,8 @@ The blog post's watchdog isn't needed any more. Wandering used to blank the scre
 
 4. Add the schedule from `home-assistant/automation.yaml` to your `automations.yaml`, with your own person and entity names. It runs the kiosk only while you're home, from 06:00 to 22:00: at full brightness while the sun is up, and dimmed before sunrise and after sunset. The rest of the time Chromium is stopped and the screen is off. When it brings the kiosk back, it starts Chromium 15 seconds before turning the screen on, so the page has loaded by then.
 
-Without Home Assistant, the screen stays on at full brightness. The blog post has a cron backlight schedule instead.
+Without Home Assistant, the screen stays on at full brightness. The [first post](https://maker.rip/2026/10/21/running-floor796-in-kiosk-mode-on-a-raspberry-pi/#7-dim-and-turn-off-the-screen-at-night) has a cron backlight schedule instead.
 
 ## Licence
 
-MIT. The blog post is CC BY 4.0.
+MIT. The blog posts are CC BY 4.0.
