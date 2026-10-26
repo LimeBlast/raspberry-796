@@ -4,7 +4,7 @@
 # ~/.config/mosquitto_pub and mosquitto_sub. Runs as the systemd user service kiosk-mqtt.
 export WAYLAND_DISPLAY=wayland-0 XDG_RUNTIME_DIR=/run/user/$(id -u)
 BL=/sys/class/backlight/10-0045/brightness
-OFF=$HOME/kiosk-off  # while this exists, kiosk.sh and the watchdog leave Chromium stopped
+OFF=$HOME/kiosk-off  # while this exists, kiosk.sh (and so cron) leaves Chromium stopped
 N=$(hostname)        # names the device, its entities and its MQTT topics
 
 pub() { mosquitto_pub -r -t "$1" -m "$2"; }

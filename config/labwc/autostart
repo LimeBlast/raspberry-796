@@ -3,6 +3,3 @@ wlr-randr --output DSI-1 --on
 
 # Launch Chromium after a short delay to let the network come up
 (sleep 8 && ~/kiosk.sh) &
-
-# Restart the kiosk if the screen goes blank
-(sleep 60 && ~/kiosk-watchdog.sh) &

@@ -20,9 +20,8 @@ Everything runs as your normal desktop user, not root.
 | File | Goes to | What it does |
 |---|---|---|
 | `kiosk.sh` | `~/kiosk.sh` | Starts (or restarts) Chromium on Floor796's Wandering mode |
-| `kiosk-watchdog.sh` | `~/kiosk-watchdog.sh` | Restarts the kiosk when the screen stays blank |
 | `make-blank-cursor.sh` | run once | Makes the invisible cursor theme |
-| `config/labwc/autostart` | `~/.config/labwc/autostart` | Starts the kiosk and the watchdog at login |
+| `config/labwc/autostart` | `~/.config/labwc/autostart` | Starts the kiosk at login |
 | `config/labwc/environment` | add to `~/.config/labwc/environment` | Uses the invisible cursor |
 | `config/labwc/rc.xml` | merge into `~/.config/labwc/rc.xml` | Optional touch |
 | `crontab` | `crontab -e` | Restarts the browser every 6 hours |
@@ -37,7 +36,6 @@ Everything runs as your normal desktop user, not root.
    ```sh
    sudo raspi-config nonint do_boot_behaviour B4
    sudo raspi-config nonint do_blanking 1
-   sudo apt install -y grim
    ```
 
    If the screen is upside down, open Preferences → Screen Configuration, right-click DSI-1, and set Orientation → Inverted.
@@ -46,7 +44,7 @@ Everything runs as your normal desktop user, not root.
 
    ```sh
    git clone https://github.com/LimeBlast/raspberry-796.git && cd raspberry-796
-   cp kiosk.sh kiosk-watchdog.sh ~/
+   cp kiosk.sh ~/
    mkdir -p ~/.config/labwc && cp config/labwc/autostart ~/.config/labwc/
    cat config/labwc/environment >> ~/.config/labwc/environment
    sh make-blank-cursor.sh
@@ -57,16 +55,14 @@ Everything runs as your normal desktop user, not root.
 
 4. Reboot. Floor796 appears and starts wandering within about 20 seconds.
 
-### The watchdog
-
-Wandering used to lose the camera every 30 to 90 minutes (a division by zero when the next point was the current one), leaving the screen blank. Floor796 fixed this on 25 October 2026. The watchdog stays until that's confirmed on a running kiosk. It logs each restart (`journalctl -t kiosk-watchdog`) and saves what the screen showed as `~/kiosk-blank-<time>.png`.
+The blog post's watchdog isn't needed any more. Wandering used to blank the screen every 30 to 90 minutes, and Floor796 fixed that on 25 October 2026.
 
 ## Home Assistant (optional)
 
 `kiosk-mqtt.sh` shows the Pi in Home Assistant through MQTT discovery, as a device named after its hostname with two entities:
 
 - `light.<hostname>_screen`: the backlight, with brightness. Off also turns the display output off.
-- `switch.<hostname>_kiosk`: Chromium. Off stops it and creates `~/kiosk-off`, which `kiosk.sh`, cron and the watchdog leave alone until it's on again.
+- `switch.<hostname>_kiosk`: Chromium. Off stops it and creates `~/kiosk-off`, which `kiosk.sh` and cron leave alone until it's on again.
 
 1. Create a broker login for the Pi. In the Mosquitto add-on, add one under `logins`.
 
