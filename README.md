@@ -66,7 +66,7 @@ The [first post](https://maker.rip/2026/10/21/running-floor796-in-kiosk-mode-on-
 
 `kiosk-mqtt.sh` shows the Pi in Home Assistant through MQTT discovery, as a device named after its hostname with two entities:
 
-- `light.<hostname>_screen`: the backlight, with brightness. Off also turns the display output off.
+- `light.<hostname>_screen`: the backlight, with brightness.
 - `switch.<hostname>_kiosk`: Chromium. Off stops it and creates `~/kiosk-off`, which `kiosk.sh` and cron leave alone until it's on again.
 
 1. Create a broker login for the Pi. In the Mosquitto add-on, add one under `logins`.

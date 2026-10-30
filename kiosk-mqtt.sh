@@ -2,19 +2,16 @@
 # Bridges the screen and the kiosk to Home Assistant over MQTT, as light.<hostname>_screen and
 # switch.<hostname>_kiosk (MQTT discovery). HA runs the schedule. Broker and login are in
 # ~/.config/mosquitto_pub and mosquitto_sub. Runs as the systemd user service kiosk-mqtt.
-export WAYLAND_DISPLAY=wayland-0 XDG_RUNTIME_DIR=/run/user/$(id -u)
 BL=/sys/class/backlight/10-0045/brightness
 OFF=$HOME/kiosk-off  # while this exists, kiosk.sh (and so cron) leaves Chromium stopped
 N=$(hostname)        # names the device, its entities and its MQTT topics
 
 pub() { mosquitto_pub -r -t "$1" -m "$2"; }
 
-screen() {  # $1 = brightness 1-255, or 0 for off (backlight and display output)
-  if [ "$1" -gt 0 ]; then
-    wlr-randr --output DSI-1 --on && echo "$1" > $BL && pub $N/screen/brightness "$1" && pub $N/screen/state ON
-  else
-    echo 0 > $BL; wlr-randr --output DSI-1 --off; pub $N/screen/state OFF
-  fi
+screen() {  # $1 = brightness 1-255, or 0 for off
+  # Backlight only: toggling the DSI-1 output with wlr-randr wedged labwc, which then couldn't turn it back on
+  echo "$1" > $BL
+  if [ "$1" -gt 0 ]; then pub $N/screen/brightness "$1"; pub $N/screen/state ON; else pub $N/screen/state OFF; fi
 }
 
 kiosk() {  # $1 = ON or OFF
